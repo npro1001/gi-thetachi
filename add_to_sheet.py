@@ -24,7 +24,6 @@ def add_row(values):
     # Create the cell format
     cell_format = CellFormat(
         backgroundColor = color(1, 1, 1),
-        # horizontalAlignment='CENTER'
     )
 
     # Format the newly added row with a white background color and centered text
