@@ -64,14 +64,15 @@ profile = client.user.get_my_profile()
 
 #* Get the database
 dbname = get_database()
-collection = dbname["transaction"]
+t_collection = dbname["transaction"]
+s_collection = dbname["summary"]
 most_recent_transaction_logged = ""
 
 
 #! If the database is NOT empty:
 if len(dbname.list_collection_names()) != 0:
     # Get last transaction id and create abort flag
-    most_recent_transaction_logged = collection.find().sort("date", pymongo.DESCENDING).limit(1).next()
+    most_recent_transaction_logged = t_collection.find().sort("date", pymongo.DESCENDING).limit(1).next()
     repeat_found = False
 
     # Get recent transactions
@@ -108,7 +109,7 @@ if len(dbname.list_collection_names()) != 0:
                 # Insert into MongoDb
                 transaction_json = transaction_object.to_json()
                 transaction_to_add = json.loads(transaction_json)
-                collection.insert_one(transaction_to_add)
+                t_collection.insert_one(transaction_to_add)
 
                 # Add to sheet
                 add_row(transaction_object.to_list())
@@ -149,8 +150,9 @@ else:
             print("Adding transaction " + transaction_object.id + " to DB")
             transaction_json = transaction_object.to_json()
             transaction_to_add = json.loads(transaction_json)
-            # collection.insert_one(transaction_to_add)   #! Comment for testing 
-
+            # make sure transaction username is not self! 
+            # t_collection.insert_one(transaction_to_add)   #! Comment for testing 
+            # update summary objects in s_collection - summary for total, and each organization?
 
             # Add to sheet
             # print(transaction_object.to_list()
@@ -168,9 +170,12 @@ else:
 # TODO - Sort based on organization              X
 # TODO - flag unparsable orgs                    X
 # TODO - Show totals for each org                X
-# TODO - GitHub
+# TODO - GitHub                                  X
 # TODO - make a website showing completion 
-# TODO - If username is self, make amount (-)
+    # TODO - fix conditions for adding to database and sheet, self username indicates (-) money for sheet and Mongo
+    # TODO - Data summary object
+    # TODO - API update call
+    # TODO - Frontend formatting
 
 
 
