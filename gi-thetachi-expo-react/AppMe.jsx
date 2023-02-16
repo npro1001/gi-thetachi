@@ -48,6 +48,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.titleText}>GI THETA CHI</Text>
       <ProgressText progress={progress.value} />
       <Svg width={width} height={height}>
         <Circle 
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: BACKGROUND_COLOR,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
+    // position: 'relative',
   },
   progressTextContainer: {
     position: 'absolute',
@@ -93,6 +94,10 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 80,
+    color: 'rgba(256, 256, 256, 0.7)',
+  },
+  titleText: {
+    fontSize: 100,
     color: 'rgba(256, 256, 256, 0.7)',
   }
 })
