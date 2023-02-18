@@ -17,6 +17,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { ReText } from 'react-native-redash';
 import Svg, { Circle } from 'react-native-svg';
+import AnimateableText from 'react-native-animateable-text';
+
 Animated.addWhitelistedNativeProps({ text: true });
 
 
@@ -35,11 +37,10 @@ export default function App() {
 
   const [progressValue, setProgressValue] = useState(0.0);
   const progressPercent = useSharedValue(0);
-  // const [progressPercentText, setProgressPercentText] = useState(0);
 
-  const textAnimatedProps = useAnimatedProps(() => {
-		return { text: progressPercent.value };
-	});
+  // const textAnimatedProps = useAnimatedProps(() => {
+	// 	return { text: progressPercent.value };
+	// });
 
   useEffect(() => {
     const source = new EventSource('http://127.0.0.1:5000/stream-data');
@@ -72,6 +73,12 @@ export default function App() {
     return `${percent}%`;
   });
 
+  const animatedProps2 = useAnimatedProps(() => {
+      return {
+        text: progressPercentText.value,
+      };
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
@@ -81,7 +88,8 @@ export default function App() {
       {/* <PercentText value={progressPercentText.value}/> */}
       {/* <ReText style={styles.percentText} text={progressPercentText} />  */}
       {/* <Text style={styles.percentText}>{progressPercentText.value}</Text> */}
-      <AnimatedText text={progressPercentText} />
+      {/* <AnimatedText text={progressPercentText} /> */}
+      <AnimateableText animatedProps={animatedProps2} />
       <Svg style={{ position: 'absolute' }} height={height} width={width}>
         <Circle
           cx={width / 2}
