@@ -16,10 +16,10 @@ dbname = get_database()
 s_collection = dbname["summary"]
 
 
-@app.route('/', methods=['GET', 'OPTIONS'])
-@cross_origin()
-def index():
-    return render_template('index.html')
+# @app.route('/', methods=['GET', 'OPTIONS'])
+# @cross_origin()
+# def index():
+#     return render_template('index.html')
 
 def generate_data():
     while True:
