@@ -21,12 +21,13 @@ s_collection = dbname["summary"]
 # def index():
 #     return render_template('index.html')
 
-def generate_data():
-    while True:
-        data = s_collection.find_one({ "_id": "1" })
-        yield 'data: {}\n\n'.format(json.dumps(data))
-        time.sleep(60) # Send data every 10 minutes
 
 @app.route('/stream-data')
 def stream_data():
+    def generate_data():
+        while True:
+            data = s_collection.find_one({ "_id": "1" })
+            yield 'data: {}\n\n'.format(json.dumps(data))
+            time.sleep(60) # Send data every 10 minutes
+    
     return Response(generate_data(), mimetype='text/event-stream')
