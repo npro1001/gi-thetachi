@@ -8,15 +8,15 @@ import redis
 import json
 
 
-flask_app = Flask(__name__)
-CORS(flask_app)
-flask_app.register_blueprint(sse, url_prefix='/stream')
+app = Flask(__name__)
+CORS(app)
+app.register_blueprint(sse, url_prefix='/stream')
 
 dbname = get_database()
 s_collection = dbname["summary"]
 
 
-@flask_app.route('/', methods=['GET', 'OPTIONS'])
+@app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()
 def index():
     return render_template('index.html')
@@ -27,6 +27,6 @@ def generate_data():
         yield 'data: {}\n\n'.format(json.dumps(data))
         time.sleep(60) # Send data every 10 minutes
 
-@flask_app.route('/stream-data')
+@app.route('/stream-data')
 def stream_data():
     return Response(generate_data(), mimetype='text/event-stream')
