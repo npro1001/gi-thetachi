@@ -2,6 +2,9 @@ import {StyleSheet, Dimensions} from 'react-native';
 const BACKGROUND_COLOR = '#fff'; //'#191716';
 const BACKGROUND_STROKE_COLOR = '#78171A';
 const TEXT_COLOR = '#191716';
+const TEXT_COLOR2 = '#fff';
+const TEXT_COLOR3 = '#09274B';
+
 const STROKE_COLOR = '#DB4348';
 const { width, height } = Dimensions.get('window');
 const CIRCLE_LENGTH = 1000; // 2PI*R
@@ -20,11 +23,12 @@ const styles = StyleSheet.create({
         width: width,
     },
     header: {
+        zIndex: 1,
         flexDirection: 'row',
         alignItems: 'left',
         justifyContent: 'left',
-        position: 'fixed',
-        width: '100%',
+        position: 'absolute',
+        width: width * 0.33,
         height: height/10,
         top: 0,
         left: 0,
@@ -49,27 +53,38 @@ const styles = StyleSheet.create({
         height: height,
         width: width,
     },
-    progressBox: {
+    aboveProgressBox: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: height/8,
+        backgroundColor: BACKGROUND_COLOR,
         flex: 1,
-        flexDireciton: 'column',
+        position: 'relative',
+        textAlign: 'center',
+    },
+    progressBox: {
+        flex: 2,
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: BACKGROUND_COLOR,
-        width: width * 0.33,
-        padding: 20,
+        aspectRatio: 1,
+        padding: 10,
     },
     progressText: {
+        flex: 1,
         fontSize: 40,
-        color: TEXT_COLOR,
-        marginTop: height/2,
-        position: 'absolute',
+        color: TEXT_COLOR3,
+        position: 'relative',
         textAlign: 'center',
     },
     rightSection: {
+        zIndex: 1,
         flex: 2,
         backgroundColor: BACKGROUND_COLOR,
         backgroundImage: `url(${Backdrop})`,
         backgroundSize: "fill",
+        flexDirection: 'column',
         resizeMode: 'contain',
         backgroundRepeat: "no-repeat",
         alignItems: 'center',
@@ -77,12 +92,18 @@ const styles = StyleSheet.create({
         width: width * 0.66,
         height: '100%',
     },
-      logo: {
+      OXlogo: {
+        zIndex: 1,
         width: undefined,
-        height: '125%',
+        height: undefined,
         aspectRatio: 2,
         resizeMode: 'contain',
-        position: 'absolute'
+      },
+      USOlogo: {
+        width: '20%',
+        height: '30%',
+        resizeMode: 'contain',
+        aspectRatio: 1.2,
       },
       titleText: {
         fontSize: 20,
@@ -98,7 +119,6 @@ const styles = StyleSheet.create({
       percentText: {
         fontSize: 80,
         color: TEXT_COLOR,
-        width: 200,
         textAlign: 'center',
       },
       button: {
@@ -118,7 +138,39 @@ const styles = StyleSheet.create({
       },
       titleText: {
         fontSize: 80,
-        color: TEXT_COLOR,
+        color: TEXT_COLOR2,
+        textAlign: 'center',
+        padding: '2%'
+      },
+      goalText: {
+        fontSize: 90,
+        color: TEXT_COLOR3,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        padding: '5%',
+        borderRadius: 25,
+      },
+      paragraphContainer: {
+        position: 'absolute',
+        // flexDirection: 'column',
+        top: height * 0.1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '5%',
+        fontSize: 20,
+      },
+      paragraph: {
+        fontSize: 23,
+        color: TEXT_COLOR2,
+        textAlign: 'center',
+        padding: '2%'
+      },
+      miniText: {
+        fontSize: 23,
+        color: TEXT_COLOR3,
+        textAlign: 'center',
+        fontStyle: 'italic',
       }
     });
     

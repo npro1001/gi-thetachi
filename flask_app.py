@@ -10,7 +10,6 @@ import json
 
 flask_app = Flask(__name__)
 CORS(flask_app)
-# flask_app.config["REDIS_URL"] = "redis://localhost"
 flask_app.register_blueprint(sse, url_prefix='/stream')
 
 dbname = get_database()

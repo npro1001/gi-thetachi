@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useCallback} from 'react';
-import {StyleSheet, Text, View, Image, Dimensions, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect, useLayoutEffect} from 'react';
+import {Text, View, Image, Dimensions, TouchableOpacity} from 'react-native';
 import styles from './styles'
-import { TextInput } from 'react-native-gesture-handler'
 import Animated, { useSharedValue, withTiming, useAnimatedProps, useDerivedValue} from 'react-native-reanimated';
-import { ReText } from 'react-native-redash';
 import Svg, { Circle } from 'react-native-svg';
-import Logo from './assets/theta-chi-logo.png';
+import OXLogo from './assets/theta-chi-logo.png';
+import USOLogo from './assets/uso_logo.png';
 import Backdrop from './assets/custom-background.png'
-
-// import Logo from './assets/adaptive-icon.png';
-
 
 Animated.addWhitelistedNativeProps({ text: true });
 
@@ -20,6 +16,7 @@ const { width, height } = Dimensions.get('window');
 const CIRCLE_LENGTH = 1000; // 2PI*R
 const R = CIRCLE_LENGTH / (2 * Math.PI);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const goalS = '1,500' //30000
 const goal = 1500 //30000
 
 
@@ -28,7 +25,7 @@ export default function App() {
   const [progressValue, setProgressValue] = useState(0.0);
   const [progressPercentText, setProgressPercentText] = useState('0%');
   const progressPercent = useSharedValue(0);
-
+  
   useEffect(() => {
     const source = new EventSource('http://127.0.0.1:5000/stream-data');
 
@@ -40,8 +37,9 @@ export default function App() {
       progressPercent.value = withTiming(amount ? amount / goal : 0, { duration: 2000 })
     });
     source.addEventListener('error', function(event) {
-      data = JSON.parse(event.data);
-      alert("Failed to connect to event stream. Error: " + data);
+      errorTimeout = setTimeout(() => {
+        alert("Failed to connect to event stream. Error: " + event);
+      }, 2000);
     }, false);
     
     return () => {
@@ -63,11 +61,21 @@ export default function App() {
 
   return (
     <View style={styles.windowContainer}>
+      {/* *** HEADER *** */}
       <View style={styles.header}>
-        <Image source={Logo} style={styles.logo}/>
+        <Image source={OXLogo} style={styles.OXlogo}/>
       </View>
       <View style={styles.body}>
+        {/* *** LEFT SECTION *** */}
         <View style={styles.leftSection}>
+
+          {/* Goal Text */}
+          <View style={styles.aboveProgressBox}>
+            <Text style={styles.miniText}>Our 2023 Goal</Text>
+            <GoalText goal={goalS}/>
+          </View>
+
+          {/* Progress Circle */}
           <View style={styles.progressBox}>
             <Animated.Text style={styles.percentText}>{progressPercentText}</Animated.Text>
             <Svg style={styles.circle}>
@@ -92,24 +100,23 @@ export default function App() {
               />
             </Svg>
           </View>
-          <ProgressText style={styles.progressText} value={progressValue}/> 
+
+          {/* Current Progress */}
+          <ProgressText style={styles.progressText} value={progressValue}/>       
         </View>
+
+        {/* *** RIGHT SECTION *** */}
         <View style={styles.rightSection}>
-          <Text>SOMESHIT</Text>
-          <Image
-            source={Backdrop}
-            style={{
-              width: '100%',
-              height: '100%',
-              resizeMode: 'cover',
-            }}
-          />
+          <Image source={Backdrop} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+          <View style={styles.paragraphContainer}>
+            <Text style={styles.titleText}>G.I. Theta Chi 2023</Text>
+            <Image source={USOLogo} style={styles.USOlogo}/>
+            <Text style={styles.paragraph}>In 2013 the first ever G.I. Theta Chi event was held by the UCF chapter of Theta Chi.  Since then, it has grown into one of the largest philanthropic events hosted by various chapters  across the nation. Since it’s conception, we have raised over $100,000 for the U.S.O. and  raised over $45,000 last year alone.  </Text>
+            <Text style={styles.paragraph}>The U.S.O. strengthens America’s military service members by keeping them connected to family, home and country throughout their service to the nation.</Text>
+            <Text style={styles.paragraph}>Help us hit our 2023 goal!    <span style={{fontWeight:'bold', textDecoration:'underline'}}>Venmo: @githetachi23</span></Text>
+          </View>
         </View>
       </View>
-
-      {/* <TouchableOpacity onPress={onPress} style={styles.button}>
-        <Text style={styles.buttonText}>Run</Text>
-      </TouchableOpacity> */}
     </View>
     
   );
@@ -117,6 +124,10 @@ export default function App() {
 
 
 const ProgressText = ({ value }) => {
-  return <Text style={styles.progressText}>${value} total raised</Text>
+  return <Text style={styles.progressText}>Raised ${value}</Text>
+}
+
+const GoalText = ({ goal }) => {
+  return <Text style={styles.goalText}>${goal}</Text>
 }
 
