@@ -6,7 +6,6 @@ import Svg, { Circle } from 'react-native-svg';
 import OXLogo from './assets/theta-chi-logo.png';
 import USOLogo from './assets/uso_logo.png';
 import Backdrop from './assets/custom-background.png'
-require('dotenv').config();
 
 Animated.addWhitelistedNativeProps({ text: true });
 

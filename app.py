@@ -22,7 +22,7 @@ s_collection = dbname["summary"]
 #     return render_template('index.html')
 @app.route('/')
 def index():
-    return app.send_static_file('index.html')
+    return app.send_static_file('./static/index.html')
 
 
 @app.route('/stream-data')
