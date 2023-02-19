@@ -27,7 +27,7 @@ export default function App() {
   const progressPercent = useSharedValue(0);
   
   useEffect(() => {
-    const source = new EventSource('http://127.0.0.1:5000/stream-data');
+    const source = new EventSource(process.env.REACT_APP_SERVER + '/stream-data');
 
     // Retrieve Server Sent Event
     source.addEventListener('message', e => {
