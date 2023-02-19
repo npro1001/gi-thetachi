@@ -14,10 +14,12 @@ from add_to_sheet import add_row
 from sort_by_org import find_org
 from convert_time import convert
 from summary import Summary
-from secret import VENMO_EMAIL, VENMO_PASSWORD
+VENMO_EMAIL = os.environ.get('VENMO_EMAIL')
+VENMO_PASSWORD = os.environ.get('VENMO_PASSWORD')
 import pymongo
 import json
 import re
+import os
 
 def transaction_string_to_json_dict(data):
     regex = "(\w+)\s?=\s?([\w.:/]+|\w+|[^,]+?),"

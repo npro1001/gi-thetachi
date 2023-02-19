@@ -1,5 +1,7 @@
 from pymongo import MongoClient
-from secret import CONNECTION_STRING
+import os
+CONNECTION_STRING= os.environ.get('CONNECTION_STRING')
+
 
 def get_database():
  

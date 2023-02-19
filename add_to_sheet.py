@@ -1,5 +1,7 @@
 import requests
-from secret import SPREADSHEET_ID, key_file_location
+import os
+SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID')
+key_file_location = os.environ.get('key_file_location')
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 import gspread
