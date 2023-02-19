@@ -20,6 +20,9 @@ s_collection = dbname["summary"]
 # @cross_origin()
 # def index():
 #     return render_template('index.html')
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 
 @app.route('/stream-data')
