@@ -1,24 +1,36 @@
 import * as React from "react";
-import {TextInput} from "react-native";
-import Animated, { useAnimatedProps } from 'react-native-reanimated'
+import {Text, TextInput} from "react-native";
+import Animated, { useAnimatedProps, useDerivedValue, useAnimatedReaction, interpolate } from 'react-native-reanimated'
 import styles from './styles'
+import { ReText } from 'react-native-redash';
 
-const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
-const AnimatedText = ({ text }) => {
+// const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
+Animated.addWhitelistedNativeProps({});
+
+
+const AnimatedText = ({ progressPercent }) => {
+
+    const progressPercentAnimated = useDerivedValue(() => {
+        console.log(progressPercent.value)
+        const percent = Math.floor(progressPercent.value * 100);
+        return percent;
+    });
 
     const animatedProps = useAnimatedProps(() => {
+        console.log(progressPercentAnimated.value)
         return {
-            text: String(text.value),
+            text: `${progressPercentAnimated.value}%`
+            // text:`${interpolate(progressPercentAnimated.value, [0, 100], [0, 100], Animated.Extrapolate.CLAMP)}%`,
         }
     })
 
     return (
-        <AnimatedTextInput
-            value={text.value}
-            style={styles.percentText}
-            animatedProps={animatedProps}
-        />
+        // <Animated.Text
+        //     style={styles.percentText}
+        //     animatedProps={animatedProps}
+        // />
+        <Animated.Text style={styles.percentText} animatedProps={animatedProps} />
     )
 }
 
