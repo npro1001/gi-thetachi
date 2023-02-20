@@ -1,9 +1,0 @@
-{
-  "background_color": "#ffffff",
-  "display": "standalone",
-  "lang": "en",
-  "name": "gi-thetachi-expo-react",
-  "short_name": "gi-thetachi-expo-react",
-  "start_url": "/?utm_source=web_app_manifest",
-  "orientation": "portrait"
-}
