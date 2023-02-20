@@ -26,6 +26,10 @@ def index():
 def send_static(path):
     return send_from_directory('static', path)
 
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory('static', path)
+
 @app.route('/stream-data')
 def stream_data():
     def generate_data():
