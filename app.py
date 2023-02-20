@@ -8,7 +8,7 @@ import redis
 import json
 
 
-app = Flask(__name__, static_folder='gi-thetachi-expo-react/web-build') # static_url_path='/gi-thetachi-expo-react')
+app = Flask(__name__) # static_url_path='/gi-thetachi-expo-react')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
 
@@ -19,7 +19,7 @@ s_collection = dbname["summary"]
 @app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()
 def index():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory('static', 'index.html')
 
 # @app.route('/')
 # def index():
