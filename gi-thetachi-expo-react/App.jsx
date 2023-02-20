@@ -6,6 +6,9 @@ import Svg, { Circle } from 'react-native-svg';
 import OXLogo from './assets/theta-chi-logo.png';
 import USOLogo from './assets/uso_logo.png';
 import Backdrop from './assets/custom-background.png'
+import Constants from 'expo-constants';
+
+const apiUrl = Constants.manifest.extra.REACT_APP_SERVER;
 
 Animated.addWhitelistedNativeProps({ text: true });
 
@@ -19,7 +22,6 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const goalS = '1,500' //30000
 const goal = 1500 //30000
 
-
 export default function App() {
 
   const [progressValue, setProgressValue] = useState(0.0);
@@ -27,7 +29,7 @@ export default function App() {
   const progressPercent = useSharedValue(0);
   
   useEffect(() => {
-    const source = new EventSource(process.env.REACT_APP_SERVER + '/stream-data');
+    const source = new EventSource(apiUrl + '/stream-data');
 
     // Retrieve Server Sent Event
     source.addEventListener('message', e => {

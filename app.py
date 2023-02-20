@@ -8,7 +8,6 @@ import redis
 import json
 import os
 
-
 app = Flask(__name__, static_folder='./gi-thetachi-expo-react/web-build/') # static_url_path='/gi-thetachi-expo-react')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
@@ -16,6 +15,15 @@ app.register_blueprint(sse, url_prefix='/stream')
 dbname = get_database()
 s_collection = dbname["summary"]
 
+@app.route('/stream-data')
+def stream_data():
+    def generate_data():
+        while True:
+            data = s_collection.find_one({ "_id": "1" })
+            yield 'data: {}\n\n'.format(json.dumps(data))
+            time.sleep(60) # Send data every 10 minutes
+    
+    return Response(generate_data(), mimetype='text/event-stream')
 
 @app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()
@@ -39,13 +47,3 @@ def send_static(path):
 def serve_static(path):
     return send_from_directory(app.static_folder, path)
 
-
-@app.route('/stream-data')
-def stream_data():
-    def generate_data():
-        while True:
-            data = s_collection.find_one({ "_id": "1" })
-            yield 'data: {}\n\n'.format(json.dumps(data))
-            time.sleep(60) # Send data every 10 minutes
-    
-    return Response(generate_data(), mimetype='text/event-stream')

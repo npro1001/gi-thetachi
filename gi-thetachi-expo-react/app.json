@@ -28,6 +28,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+        "REACT_APP_SERVER": "http://127.0.0.1:5000"
     }
   }
 }
