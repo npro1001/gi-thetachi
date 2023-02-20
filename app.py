@@ -8,7 +8,7 @@ import redis
 import json
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
 
