@@ -8,6 +8,10 @@ import redis
 import json
 import os
 
+port = int(os.environ.get('PORT', 5000)) # default to port 5000 if PORT environment variable is not set
+
+
+
 app = Flask(__name__, static_folder='./gi-thetachi-expo-react/web-build/') # static_url_path='/gi-thetachi-expo-react')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
@@ -48,4 +52,4 @@ def serve_static(path):
     return send_from_directory(app.static_folder, path)
 
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(host='0.0.0.0', port=port)
