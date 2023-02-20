@@ -25,6 +25,10 @@ def index():
 def send_js(path):
     return send_from_directory('static/js', path)
 
+@app.route('/static/js/')
+def send_js_dir():
+    return send_from_directory('static/js', '')
+
 # Serve the entire static directory
 @app.route('/static/<path:path>')
 def send_static(path):
