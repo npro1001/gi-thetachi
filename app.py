@@ -21,13 +21,10 @@ s_collection = dbname["summary"]
 def index():
     return send_from_directory(app.static_folder, 'index.html')
 
-# @app.route('/')
-# def index():
-#     return app.send_static_file('./static/index.html')
-
+# Serve the entire static directory
 @app.route('/static/<path:path>')
-def serve_static(path):
-    return send_from_directory(app.static_folder, path)
+def send_static(path):
+    return send_from_directory('static', path)
 
 @app.route('/stream-data')
 def stream_data():
