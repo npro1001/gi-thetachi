@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, Response
+from flask import Flask, send_from_directory, render_template, jsonify, Response
 from flask_sse import sse
 from flask_cors import CORS, cross_origin
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -8,7 +8,7 @@ import redis
 import json
 
 
-app = Flask(__name__, static_folder='/web-build', static_url_path='/gi-thetachi-expo-react')
+app = Flask(__name__, static_folder='gi-thetachi-expo-react/web-build') # static_url_path='/gi-thetachi-expo-react')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
 
@@ -19,7 +19,7 @@ s_collection = dbname["summary"]
 @app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()
 def index():
-    return app.send_static_file('index.html')
+    return send_from_directory(app.static_folder, 'index.html')
 
 # @app.route('/')
 # def index():
