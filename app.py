@@ -21,18 +21,19 @@ s_collection = dbname["summary"]
 def index():
     return send_from_directory(app.static_folder, 'index.html')
 
+@app.route('/static/js/<path:path>')
+def send_js(path):
+    return send_from_directory('static/js', path)
+
 # Serve the entire static directory
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
 
-@app.route('/<path:path>')
-def serve_static(path):
-    return send_from_directory('static', path)
+# @app.route('/<path:path>')
+# def serve_static(path):
+#     return send_from_directory('static', path)
 
-@app.route('/static/js/<path:path>')
-def send_js(path):
-    return send_from_directory('static/js', path)
 
 @app.route('/stream-data')
 def stream_data():
