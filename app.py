@@ -30,6 +30,10 @@ def send_static(path):
 def serve_static(path):
     return send_from_directory('static', path)
 
+@app.route('/static/js/<path:path>')
+def send_js(path):
+    return send_from_directory('static/js', path)
+
 @app.route('/stream-data')
 def stream_data():
     def generate_data():
