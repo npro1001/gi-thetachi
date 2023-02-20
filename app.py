@@ -12,7 +12,7 @@ port = int(os.environ.get('PORT', 5000)) # default to port 5000 if PORT environm
 
 
 
-app = Flask(__name__, static_url_path='./gi-thetachi-expo-react/web-build/')
+app = Flask(__name__, static_folder='./gi-thetachi-expo-react/web-build/')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
 
@@ -32,24 +32,24 @@ def stream_data():
 @app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()
 def index():
-    return send_from_directory(app.static_url_path, 'index.html')
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/static/js/<path:path>')
 def send_js(path):
-    return send_from_directory(os.path.join(app.static_url_path, 'static', 'js'), path)
+    return send_from_directory(os.path.join(app.static_folder, 'static', 'js'), path)
 
 @app.route('/static/js/')
 def send_js_dir():
-    return send_from_directory(os.path.join(app.static_url_path, 'static', 'js'), '')
+    return send_from_directory(os.path.join(app.static_folder, 'static', 'js'), '')
 
 # Serve the entire static directory
 @app.route('/static/<path:path>')
 def send_static(path):
-    return send_from_directory(os.path.join(app.static_url_path, 'static'), path)
+    return send_from_directory(os.path.join(app.static_folder, 'static'), path)
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory(app.static_url_path, path)
+    return send_from_directory(app.static_folder, path)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port)
