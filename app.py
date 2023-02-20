@@ -8,7 +8,7 @@ import redis
 import json
 
 
-app = Flask(__name__, static_folder='/web-build') # static_url_path='/gi-thetachi-expo-react')
+app = Flask(__name__, static_folder='/web-build', static_url_path='/gi-thetachi-expo-react')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
 
