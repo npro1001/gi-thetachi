@@ -6,8 +6,8 @@ const webpack = require('webpack');
 module.exports = {
   entry: ['./src/index.js'],
   output: {
-    path: path.resolve(__dirname, './release'),
-    filename: 'index.html', // bundle.js
+    path: path.resolve(__dirname, './public'),
+    filename: 'bundle.js', // bundle.js
   },
   plugins: [
     new Dotenv(),
