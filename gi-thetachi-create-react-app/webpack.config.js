@@ -11,6 +11,10 @@ module.exports = {
   },
   plugins: [
     new Dotenv(),
+    new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, 'public', 'index.html'),
+        filename: 'index.html',
+      }),
     new webpack.DefinePlugin({
       'process.env.REACT_APP_SERVER': JSON.stringify(process.env.REACT_APP_SERVER),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
