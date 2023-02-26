@@ -30,6 +30,8 @@ export default function App() {
   
   useEffect(() => {
     const source = new EventSource(apiUrl + '/stream-data');
+    console.log(process.env.REACT_APP_SERVER);
+
 
     // Retrieve Server Sent Event
     source.addEventListener('message', e => {
