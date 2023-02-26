@@ -7,7 +7,7 @@ module.exports = {
   entry: ['./src/index.js'],
   output: {
     path: path.resolve(__dirname, './release'),
-    filename: 'bundle.js',
+    filename: 'index.html', // bundle.js
   },
   plugins: [
     new Dotenv(),
