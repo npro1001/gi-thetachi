@@ -32,7 +32,7 @@ def stream_data():
 @app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()
 def index():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, 'bundle.js')
 
 # @app.route('/static/js/<path:path>')
 # def send_js(path):
