@@ -19,8 +19,8 @@ const { width, height } = Dimensions.get('window');
 const CIRCLE_LENGTH = 1000; // 2PI*R
 const R = CIRCLE_LENGTH / (2 * Math.PI);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const goalS = '1,500' //30000
-const goal = 1500 //30000
+const goalS = '30,000' //30000
+const goal = 30000 //30000
 
 export default function App() {
 
@@ -41,9 +41,10 @@ export default function App() {
       progressPercent.value = withTiming(amount ? amount / goal : 0, { duration: 2000 })
     });
     source.addEventListener('error', function(event) {
-      const errorTimeout = setTimeout(() => {
-        alert("Failed to connect to event stream. Error: " + event);
-      }, 2000);
+      // const errorTimeout = setTimeout(() => {
+      //   alert("Failed to connect to event stream. Error: " + event);
+      // }, 2000);
+      console.log(event)
     }, false);
     
     return () => {

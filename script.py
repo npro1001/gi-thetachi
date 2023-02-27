@@ -14,12 +14,18 @@ from add_to_sheet import add_row
 from sort_by_org import find_org
 from convert_time import convert
 from summary import Summary
-VENMO_EMAIL = os.environ.get('VENMO_EMAIL')
-VENMO_PASSWORD = os.environ.get('VENMO_PASSWORD')
+from dotenv import load_dotenv
+load_dotenv()
 import pymongo
 import json
 import re
 import os
+
+VENMO_EMAIL = os.environ.get('VENMO_EMAIL')
+VENMO_PASSWORD = os.environ.get('VENMO_PASSWORD')
+VENMO_USERNAME = os.environ.get('VENMO_USERNAME')
+VENMO_ACCESS_TOKEN = os.environ.get('VENMO_ACCESS_TOKEN')
+VENMO_USER_ID = os.environ.get('VENMO_USER_ID')
 
 def transaction_string_to_json_dict(data):
     regex = "(\w+)\s?=\s?([\w.:/]+|\w+|[^,]+?),"
@@ -53,18 +59,8 @@ def transaction_to_string(transaction):
 
 #! ========================================= !#
 
-#* Get access token - need to complete the 2FA process
-# access_token = Client.get_access_token(username=VENMO_EMAIL, password=VENMO_PASSWORD)
-device_id = '50999091-09L6-8B17-60U3-6TU98D642ZC7'
-access_token = '189ddbde8f168af2f2e69a046c34d341936003d4aa7f1db210e1521cf9a77595'
-
-#* Initialize client using token
-client = Client(access_token=access_token)
-
-#* Get user ID
-profile = client.user.get_my_profile()
-# print(profile)
-
+# #* Initialize client using token
+client = Client(access_token=VENMO_ACCESS_TOKEN)
 
 #* Get the database
 dbname = get_database()
@@ -84,14 +80,12 @@ if 'transaction' in dbname.list_collection_names():
 
     # Get recent transactions
     print("===== Beginning Venmo transaction collection process! =====")
-    transactions = client.user.get_user_transactions(user_id=2575039018827776650)
+    transactions = client.user.get_user_transactions(user_id=VENMO_USER_ID)
     while transactions:
         for transaction in transactions:
-            # Parse response string into JSON object -> Transaction Object
+            # Parse response string -> JSON object -> Transaction Object
             transaction_string = transaction_to_string(transaction)
-                # print(transaction_string)
             transaction_json_dict = transaction_string_to_json_dict(transaction_string)
-                # print(transaction_json_dict)
             transaction_object = Transaction(
                 transaction_json_dict['id'],
                 transaction_json_dict['date_completed'],
@@ -111,18 +105,21 @@ if 'transaction' in dbname.list_collection_names():
 
             # If transaction is not in DB, add it to DB and sheet
             else:
-                print("Adding transaction " + transaction_object.id + " to DB")
+                # Check if trasaction was outgoing
+                if(str(transaction_object.donor_username).lower() != VENMO_USERNAME):
+                    print("Adding transaction " + transaction_object.id + " to DB")
 
-                # Insert into MongoDb
-                transaction_json = transaction_object.to_json()
-                transaction_to_add = json.loads(transaction_json)
-                t_collection.insert_one(transaction_to_add)
+                    # Insert into MongoDb
+                    transaction_json = transaction_object.to_json()
+                    transaction_to_add = json.loads(transaction_json)
+                    t_collection.insert_one(transaction_to_add)
 
-                # Add to sheet
-                add_row(transaction_object.to_list())
+                    # Add to sheet
+                    print("Adding transaction " + transaction_object.id + " to Google Sheet")
+                    add_row(transaction_object.to_list())
 
-                # Increment new amount to add to Summary
-                total_increase += transaction_object.amount
+                    # Increment new amount to add to Summary
+                    total_increase += transaction_object.amount
 
 
         # End collection if repeat transaction was found
@@ -130,10 +127,9 @@ if 'transaction' in dbname.list_collection_names():
             print("=====   Ending Venmo transaction collection process!   =====")
             break
 
-        #? TESTING
-        print("=====   Ending Venmo transaction collection process EARLY for testing!   =====")
-        break;
-
+        # #? TESTING
+        # print("=====   Ending Venmo transaction collection process EARLY for testing!   =====")
+        # break;
         print("\n" + "=" * 15 + "\n\tNEXT PAGE\n" + "=" * 15 + "\n")
         transactions = transactions.get_next_page()
     
@@ -149,17 +145,16 @@ if 'transaction' in dbname.list_collection_names():
 else:
     # Summary initial amount
     initial_total = 0.0
+    count = 0
 
     # Get initial list of transactions
     print("===== Beginning Venmo transaction collection process! =====")
-    transactions = client.user.get_user_transactions(user_id=2575039018827776650)
+    transactions = client.user.get_user_transactions(user_id=VENMO_USER_ID)
     while transactions:
         for transaction in transactions:
-            # Parse response string into JSON object -> Transaction Object
+            # Parse response string -> JSON object -> Transaction Object
             transaction_string = transaction_to_string(transaction)
-                # print(transaction_string)
             transaction_json_dict = transaction_string_to_json_dict(transaction_string)
-                # print(transaction_json_dict)
             transaction_object = Transaction(
                 transaction_json_dict['id'],
                 transaction_json_dict['date_completed'],
@@ -172,48 +167,45 @@ else:
                 transaction_json_dict['actor']['last_name'],
                 find_org(transaction_json_dict['note']))
 
-            # Add to DB 
-            print("Adding transaction " + transaction_object.id + " to DB")
-            transaction_json = transaction_object.to_json()
-            transaction_to_add = json.loads(transaction_json)
-            # make sure transaction username is not self! 
-            t_collection.insert_one(transaction_to_add)   #! Comment for testing 
+            # Check if trasaction was outgoing
+            if(str(transaction_object.donor_username).lower() != VENMO_USERNAME):
+                # Add to DB 
+                print("Adding transaction " + transaction_object.id + " to DB")
+                transaction_json = transaction_object.to_json()
+                transaction_to_add = json.loads(transaction_json)
+                t_collection.insert_one(transaction_to_add)
 
-            # Add to sheet
-            # print(transaction_object.to_list()
-            add_row(transaction_object.to_list())
+                # Add to sheet
+                print("Adding transaction " + transaction_object.id + " to Google Sheet")
+                add_row(transaction_object.to_list())
 
-            # Add to initial total
-            initial_total += transaction_object.amount
+                # Add to initial total
+                initial_total += transaction_object.amount
 
-        #? TESTING
-        print("=====   Ending Venmo transaction collection process EARLY for testing!   =====")
-        break;
+                # Initially had 34 venmo transactions for GI in account
+                # count = count + 1
+                # if count == 35: 
+                #     break
 
+        # #? TESTING
+        # print("=====   Ending Venmo transaction collection process EARLY for testing!   =====")
+        # break;
         print("\n" + "=" * 15 + "\n\tNEXT PAGE\n" + "=" * 15 + "\n")
         transactions = transactions.get_next_page()
     
     print("=====   Ending Venmo transaction collection process!   =====")
 
     # Add initial summary object to DB
-    summary_object = Summary("1", initial_total, transaction_object.date_readable) # maybe ill need this idk
-    new_date_last_updated = convert(datetime.now())     
-    new_values = { "$set": { "total_amount": initial_total,  "date_last_updated": new_date_last_updated} }
+    summary_mongo_object = s_collection.find_one({ "_id": "1" })
+    new_amount = summary_mongo_object["total_amount"] + initial_total
+    new_date_last_updated = convert(datetime.now())             
+    new_values = { "$set": { "total_amount": new_amount,  "date_last_updated": new_date_last_updated} }
     s_collection.update_one({"_id": "1"}, new_values)
+    # summary_object = Summary("1", initial_total, transaction_object.date_readable) # maybe ill need this idk
+    # new_date_last_updated = convert(datetime.now())     
+    # new_values = { "$set": { "total_amount": initial_total,  "date_last_updated": new_date_last_updated} }
+    # s_collection.update_one({"_id": "1"}, new_values)
 
-
-# TODO - Fix parsing error                       X
-# TODO - Fix date to be readable                 X
-# TODO - Fix all formatting                      X
-# TODO - Sort based on organization              X
-# TODO - flag unparsable orgs                    X
-# TODO - Show totals for each org                X
-# TODO - GitHub                                  X
-# TODO - Data summary object                     X
-# TODO - fix conditions for adding to database and sheet, self username indicates (-) money for sheet and Mongo
-# TODO - make a website showing completion 
-    # TODO - API update call
-    # TODO - Frontend formatting
 
 
 
