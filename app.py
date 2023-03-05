@@ -26,7 +26,7 @@ def stream_data():
         while True:
             data = s_collection.find_one({ "_id": "1" })
             yield 'data: {}\n\n'.format(json.dumps(data))
-            time.sleep(60) # Send data every 10 minutes
+            time.sleep(3600) # Send data every hour
     
     return Response(generate_data(), mimetype='text/event-stream')
 
