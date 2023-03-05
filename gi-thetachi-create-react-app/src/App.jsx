@@ -62,8 +62,9 @@ export default function App() {
     const fetchData = async () => {
       const response = await fetch(apiUrl + '/stream-data');
       const data = await response.json();
-      setProgressValue(data.total_amount);
-      setGoal(data.goal);
+      const amount = data.total_amount;
+      setProgressValue(amount);
+      progressPercent.value = withTiming(amount ? amount / goal : 0, { duration: 2000 })
     };
 
     fetchData();
