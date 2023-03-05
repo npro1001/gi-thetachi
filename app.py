@@ -22,13 +22,18 @@ s_collection = dbname["summary"]
 
 @app.route('/stream-data')
 def stream_data():
-    def generate_data():
-        while True:
-            data = s_collection.find_one({ "_id": "1" })
-            yield 'data: {}\n\n'.format(json.dumps(data))
-            time.sleep(3600) # Send data every hour
+    data = s_collection.find_one({ "_id": "1" })
+    return jsonify(data)
+
+# @app.route('/stream-data')
+# def stream_data():
+#     def generate_data():
+#         while True:
+#             data = s_collection.find_one({ "_id": "1" })
+#             yield 'data: {}\n\n'.format(json.dumps(data))
+#             time.sleep(3600) # Send data every hour
     
-    return Response(generate_data(), mimetype='text/event-stream')
+#     return Response(generate_data(), mimetype='text/event-stream')
 
 @app.route('/', methods=['GET', 'OPTIONS'])
 @cross_origin()

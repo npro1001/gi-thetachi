@@ -37,7 +37,7 @@ export default function App() {
 
   
   useEffect(() => {
-    const source = new EventSource(apiUrl + '/stream-data');
+    // const source = new EventSource(apiUrl + '/stream-data');
 
     const updateLayout = () => {
       setScreenWidth(Dimensions.get('window').width);
@@ -46,22 +46,30 @@ export default function App() {
     Dimensions.addEventListener('change', updateLayout);
 
 
-    // Retrieve Server Sent Event
-    source.addEventListener('message', e => {
-      const data = JSON.parse(e.data);
-      const amount = data['total_amount'];
-      setProgressValue(amount);
-      progressPercent.value = withTiming(amount ? amount / goal : 0, { duration: 2000 })
-    });
-    source.addEventListener('error', function(event) {
-      // const errorTimeout = setTimeout(() => {
-      //   alert("Failed to connect to event stream. Error: " + event);
-      // }, 2000);
-      console.log(event)
-    }, false);
+    // // Retrieve Server Sent Event
+    // source.addEventListener('message', e => {
+    //   const data = JSON.parse(e.data);
+    //   const amount = data['total_amount'];
+    //   setProgressValue(amount);
+    //   progressPercent.value = withTiming(amount ? amount / goal : 0, { duration: 2000 })
+    // });
+    // source.addEventListener('error', function(event) {
+    //   // const errorTimeout = setTimeout(() => {
+    //   //   alert("Failed to connect to event stream. Error: " + event);
+    //   // }, 2000);
+    //   console.log(event)
+    // }, false);
+    const fetchData = async () => {
+      const response = await fetch(apiUrl + '/stream-data');
+      const data = await response.json();
+      setProgressValue(data.total_amount);
+      setGoal(data.goal);
+    };
+
+    fetchData();
     
     return () => {
-      source.close();
+      // source.close();
       Dimensions.removeEventListener('change', updateLayout);
     };
   })
