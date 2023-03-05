@@ -15,6 +15,7 @@ port = int(os.environ.get('PORT', 5000)) # default to port 5000 if PORT environm
 app = Flask(__name__, static_folder='./gi-thetachi-create-react-app/public/')
 CORS(app)
 app.register_blueprint(sse, url_prefix='/stream')
+app.config['TIMEOUT'] = 300
 
 dbname = get_database()
 s_collection = dbname["summary"]
