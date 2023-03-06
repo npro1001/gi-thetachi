@@ -1,8 +1,8 @@
 # gi-thetachi
-This project build with the FReMP stack collects Venmo data for the G.I. Theta Chi Philanthropy.
+This is an individual project built with the FReMP stack that collects Venmo data for the G.I. Theta Chi Philanthropy. 
 
-After collection, the script sorts the data based on donors' organization and populates a Google Sheet and MongoDB database.
+The data is sorted based on donors' organizations and stored in a MongoDB database and Google Sheet. 
 
-It also includes a website to display a running fundraising total to the public.
+Additionally, a website is available to display a running total of funds raised to the public. 
 
-You can visit the site [HERE](https://www.githetachi.us)
+You can visit the website [HERE](https://www.githetachi.us) to view the fundraising progress.
