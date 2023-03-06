@@ -63,9 +63,9 @@ const styles2 = StyleSheet.create({
         position: 'absolute',
         width: width,
         height: height/10,
-        top: 30,
+        top: 10,
         left: 0,
-        marginBottom: height/10,
+        marginBottom: 10,
         flex: 1
     },
     OXlogo: {
