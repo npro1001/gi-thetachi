@@ -14,7 +14,7 @@ sororities = {
 }
 
 def find_org(transaction_note):
-    print("Searching for string matches in transaction note...")
+    # print("Searching for string matches in transaction note...")
     note = transaction_note
     for org_name, org_slugs in sororities.items():
         for s in org_slugs:
