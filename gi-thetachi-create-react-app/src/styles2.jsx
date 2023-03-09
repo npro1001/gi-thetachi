@@ -97,6 +97,7 @@ const styles2 = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        position: 'relative',
         backgroundColor: BACKGROUND_COLOR,
         aspectRatio: 1,
         paddingBottom: 30,
@@ -170,12 +171,33 @@ const styles2 = StyleSheet.create({
         textAlign: 'center',
         padding: '2%'
       },
+      venmoText: {
+        fontSize: 18,
+        color: TEXT_COLOR2,
+        textAlign: 'center',
+        padding: '2%'
+      },
       miniText: {
         fontSize: 20,
         color: TEXT_COLOR3,
         textAlign: 'center',
         fontStyle: 'italic',
-      }
+      },
+      venmoButton: {
+      // backgroundColor: TEXT_COLOR3,
+      // borderWidth: 2,
+      // borderColor: TEXT_COLOR2,
+      marginTop: 15,
+      padding: 10,
+      borderRadius: 25,
+      alignSelf: 'flex-start',
+    },
+    venmoButtonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 16,
+      textTransform: 'uppercase',
+    }
     });
     
     export default styles2;

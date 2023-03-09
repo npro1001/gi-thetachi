@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect} from 'react';
-import {Text, View, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
+import {Text, View, Image, Dimensions, TouchableOpacity, ScrollView, SafeAreaView, Linking} from 'react-native';
 import styles from './styles.jsx'
 import styles2 from './styles2.jsx'
 import Animated, { useSharedValue, withTiming, useAnimatedProps, useDerivedValue} from 'react-native-reanimated';
@@ -73,6 +73,10 @@ export default function App() {
     setProgressPercentText(`${percent}%`);
   });
 
+  function handlePress() {
+    Linking.openURL('https://venmo.com/u/githetachi23');
+  }
+
   {
     if(screenWidth >= 800) { return (
       <View style={styles.windowContainer}>
@@ -128,7 +132,10 @@ export default function App() {
               <Image source={USOLogo} style={styles.USOlogo}/>
               <Text style={styles.paragraph}>In 2013 the first ever G.I. Theta Chi event was held by the UCF chapter of Theta Chi.  Since then, it has grown into one of the largest philanthropic events hosted by various chapters  across the nation. Since it’s conception, we have raised over $100,000 for the U.S.O. and  raised over $45,000 last year alone.  </Text>
               <Text style={styles.paragraph}>The U.S.O. strengthens America’s military service members by keeping them connected to family, home and country throughout their service to the nation.</Text>
-              <Text style={styles.paragraph}>Help us hit our 2023 goal!    <span style={{fontWeight:'bold', textDecoration:'underline'}}>Venmo: @githetachi23</span></Text>
+              <Text style={styles.paragraph}>Help us hit our 2023 goal!</Text> 
+              <TouchableOpacity onPress={handlePress}>
+                <Text style={styles.paragraph}><span style={{fontWeight:'bold', textDecoration:'underline'}}>Venmo: @githetachi23</span></Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -184,7 +191,12 @@ export default function App() {
             <Text style={styles2.paragraph}>In 2013 the first ever G.I. Theta Chi event was held by the UCF chapter of Theta Chi.  Since then, it has grown into one of the largest philanthropic events hosted by various chapters  across the nation. Since it’s conception, we have raised over $100,000 for the U.S.O. and  raised over $45,000 last year alone.  </Text>
             <Text style={styles2.paragraph}>The U.S.O. strengthens America’s military service members by keeping them connected to family, home and country throughout their service to the nation.</Text>
             <Text style={styles2.paragraph}>Help us hit our 2023 goal!</Text>
-            <Text style={styles2.paragraph}><span style={{fontWeight:'bold', textDecoration:'underline'}}>Venmo: @githetachi23</span></Text>
+            <TouchableOpacity onPress={handlePress}>
+              <View style={styles2.venmoButton}>
+                <Text style={styles2.venmoText}><span style={{fontWeight:'bold', textDecoration:'underline'}}>Venmo @githetachi23</span></Text>
+                {/* <Text style={styles2.venmoText}><span style={{fontWeight:'bold', textDecoration:'underline'}}>@githetachi23</span></Text> */}
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
     {/* </ScrollView> */}
